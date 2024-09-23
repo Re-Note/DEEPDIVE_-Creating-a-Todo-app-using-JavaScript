@@ -8,6 +8,8 @@ Flex Box 또는 Grid CSS 를 이용해서 영화를 나열합니다.
 
 ### [구현 결과 이미지]
 
+<img width="1512" alt="스크린샷 2024-09-23 오후 10 07 57" src="https://github.com/user-attachments/assets/d4237268-842d-461d-a495-d51fec42d231">
+
 
 ### [구현 결과 사이트 주소]
 
