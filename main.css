@@ -2,56 +2,56 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-}
-
-button {
+  }
+  
+  button {
 	background: none;
 	outline: none;
 	border: none;
 	cursor: pointer;
-}
-
-body {
+  }
+  
+  body {
 	background-color: lightcoral;
 	color: #fff;
-}
-
-main {
+  }
+  
+  main {
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
 	padding: 2rem 1.5rem;
-}
-
-.app {
+  }
+  
+  .app {
 	width: 100%;
 	max-width: 768px;
-}
-
-.app header {
+  }
+  
+  .app header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: 1rem;
-}
-
-.app header h1 {
+  }
+  
+  .app header h1 {
 	color: #fff;
 	font-size: 24px;
 	font-weight: 400;
-}
-
-.app header button {
+  }
+  
+  .app header button {
 	color: #fff;
 	font-size: 18px;
 	border-bottom: 2px solid #fff;
 	text-transform: uppercase;
-}
-
-.item {
+  }
+  
+  .item {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column; /* Vertical stacking for main content */
+	align-items: flex-start;
 	padding: 1.5rem;
 	border-radius: 1rem;
 	background-color: lightblue;
@@ -59,8 +59,10 @@ main {
 	margin-bottom: 1.5rem;
 }
 
-.item:last-of-type {
-	margin-bottom: 0;
+.item-content {
+	display: flex;
+	align-items: center;
+	width: 100%; /* Ensure the content takes full width */
 }
 
 .item input[type="checkbox"] {
@@ -75,7 +77,7 @@ main {
 	font-weight: 400;
 	color: black;
 	font-size: 20px;
-	flex: 1 1 0%;
+	flex-grow: 1; /* Allow the input to take up remaining space */
 	margin-right: 1rem;
 }
 
@@ -91,9 +93,17 @@ main {
 	text-decoration: line-through;
 }
 
-.item:hover,
-.item:focus-within {
-	outline: 2px solid #fff;
+.todo-image {
+	max-width: 200px;
+	max-height: 200px;
+	border-radius: 5px;
+	object-fit: cover;
+	margin-top: 1rem; /* Space between text and image */
+}
+
+.actions {
+	display: flex;
+	align-items: center;
 }
 
 .actions button {
@@ -107,10 +117,7 @@ main {
 	color: crimson;
 }
 
-.actions button:hover {
-	opacity: 1;
+.actions button.add-image-btn {
+	color: #3f51b5;
 }
 
-.actions button:last-of-type {
-	margin-right: 0;
-}

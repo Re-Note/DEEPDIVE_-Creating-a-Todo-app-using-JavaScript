@@ -1,81 +1,96 @@
-
 const list = document.getElementById("list");
 const createBtn = document.getElementById("create-btn");
 
 let todos = [];
 
 createBtn.addEventListener('click', createNewTodo);
- // addEventListener  => 어떠한 이벤트가 발생했을 때 함수를 등록.
-function createNewTodo() {
-	// 새로운 아이템 객체 생성
-	const item = {
-		id: new Date().getTime(), //1690604133472
-		text: "",
-		complete: false
-	}
 
-	// 배열에 처음에 새로운 아이템을 추가
+function createNewTodo() {
+	const item = {
+		id: new Date().getTime(),
+		text: "",
+		complete: false,
+		image: null // Image field added
+	};
+
 	todos.unshift(item);
 
-	// 요소 생성하기
 	const { itemEl, inputEl } = createTodoElement(item);
 
-	// 리스트 요소 안에 방금 생성한 아이템 요소 추가(가장 첫번째 요소로 추가)
 	list.prepend(itemEl);
 
-	// disabled 속성 제거
 	inputEl.removeAttribute("disabled");
-	// input 요소에 focus 
 	inputEl.focus();
 
 	saveToLocalStorage();
 }
 
-/* <div class="item">
-	<input type="checkbox" />
-	<input 
-		type="text" 
-		value="Todo content goes here" 
-		disabled />
-	<div class="actions">
-		<button class="material-icons">edit</button>
-		<button class="material-icons remove-btn">remove_circle</button>
-	</div>
-</div> */
 function createTodoElement(item) {
 	const itemEl = document.createElement("div");
 	itemEl.classList.add("item");
 
+	// Create a wrapper for checkbox, input, and actions
+	const itemContentEl = document.createElement("div");
+	itemContentEl.classList.add("item-content");
+
+	// Checkbox element for marking todo as complete
 	const checkbox = document.createElement("input");
 	checkbox.type = "checkbox";
 	checkbox.checked = item.complete;
 
+	// Mark the item as complete if it is checked
 	if (item.complete) {
 		itemEl.classList.add("complete");
 	}
 
+	// Input element for editing the todo text
 	const inputEl = document.createElement("input");
 	inputEl.type = "text";
 	inputEl.value = item.text;
 	inputEl.setAttribute("disabled", "");
 
+	// Image element to display uploaded image (if exists)
+	const imageEl = document.createElement("img");
+	imageEl.classList.add("todo-image");
+	if (item.image) {
+		imageEl.src = item.image;
+		imageEl.style.display = "block";
+	} else {
+		imageEl.style.display = "none";
+	}
+
+	// Actions container for buttons
 	const actionsEl = document.createElement("div");
 	actionsEl.classList.add("actions");
 
+	// Edit button
 	const editBtnEl = document.createElement("button");
 	editBtnEl.classList.add("material-icons");
 	editBtnEl.innerText = "edit";
 
+	// Remove button
 	const removeBtnEl = document.createElement("button");
 	removeBtnEl.classList.add("material-icons", "remove-btn");
 	removeBtnEl.innerText = "remove_circle";
 
-	actionsEl.append(editBtnEl); 
-	actionsEl.append(removeBtnEl);
+	// Add image button
+	const addImageBtnEl = document.createElement("button");
+	addImageBtnEl.classList.add("material-icons", "add-image-btn");
+	addImageBtnEl.innerText = "add_photo_alternate";
 
-	itemEl.append(checkbox);
-	itemEl.append(inputEl);
-	itemEl.append(actionsEl);
+	// Append buttons to actions element
+	actionsEl.append(editBtnEl);
+	actionsEl.append(removeBtnEl);
+	actionsEl.append(addImageBtnEl);
+
+	// Append checkbox, input, and actions to itemContentEl
+	itemContentEl.append(checkbox);
+	itemContentEl.append(inputEl);
+	itemContentEl.append(actionsEl);
+
+	// Append the item content and image to the item element
+	itemEl.append(itemContentEl);
+	itemEl.append(imageEl); // Append image below the input field
 
 	// EVENTS
 	checkbox.addEventListener("change", () => {
@@ -96,7 +111,6 @@ function createTodoElement(item) {
 
 	inputEl.addEventListener("blur", () => {
 		inputEl.setAttribute("disabled", "");
-
 		saveToLocalStorage();
 	});
 
@@ -108,37 +122,33 @@ function createTodoElement(item) {
 	removeBtnEl.addEventListener("click", () => {
 		todos = todos.filter(t => t.id != item.id);
 		itemEl.remove();
-
 		saveToLocalStorage();
 	});
 
-	return { itemEl, inputEl, editBtnEl, removeBtnEl }
+	// Image button event to trigger file selection
+	addImageBtnEl.addEventListener("click", () => {
+		const fileInput = document.createElement("input");
+		fileInput.type = "file";
+		fileInput.accept = "image/*";
+		fileInput.click();
+
+		// Handle image file selection
+		fileInput.addEventListener("change", () => {
+			const file = fileInput.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					const imageSrc = e.target.result;
+					item.image = imageSrc; // Save image to the item
+					imageEl.src = imageSrc;
+					imageEl.style.display = "block"; // Show image
+					saveToLocalStorage();
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+	});
+
+	return { itemEl, inputEl, editBtnEl, removeBtnEl };
 }
 
-function displayTodos() {
-	loadFromLocalStorage();
-
-	for (let i = 0; i < todos.length; i++) {
-		const item = todos[i];
-
-		const { itemEl } = createTodoElement(item);
-
-		list.append(itemEl);
-	}
-}
-
-displayTodos();
-
-function saveToLocalStorage() {
-	const data = JSON.stringify(todos);
-
-	localStorage.setItem("my_todos", data);
-}
-
-function loadFromLocalStorage() {
-	const data = localStorage.getItem("my_todos");
-
-	if (data) {
-		todos = JSON.parse(data);
-	}
-}
