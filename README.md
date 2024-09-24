@@ -13,6 +13,8 @@ Flex Box 또는 Grid CSS 를 이용해서 영화를 나열합니다.
 
 ### [구현 결과 사이트 주소]
 
+https://re-note.github.io/DEEPDIVE_Creating-a-Todo-app-using-JavaScript/
+
 ---
 
 ### [추가 구현 요구 사항]
