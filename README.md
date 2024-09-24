@@ -20,3 +20,4 @@ https://re-note.github.io/DEEPDIVE_Creating-a-Todo-app-using-JavaScript/
 ### [추가 구현 요구 사항]
 
 - 이미지 작성 기능 추가
+- 이미지 크기 조절 기능 추가
